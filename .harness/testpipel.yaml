@@ -1,0 +1,66 @@
+pipeline:
+  name: testpipel
+  identifier: testpipel
+  tags: {}
+  template:
+    templateRef: Pipeline_template
+    versionLabel: "1"
+    templateInputs:
+      stages:
+        - stage:
+            identifier: deploy
+            type: Deployment
+            spec:
+              service:
+                serviceRef: <+input>
+                serviceInputs: <+input>
+              environment:
+                environmentRef: <+input>
+                environmentInputs: <+input>
+                serviceOverrideInputs: <+input>
+                infrastructureDefinitions: <+input>
+        - stage:
+            identifier: k8s_apply
+            type: Deployment
+            spec:
+              service:
+                serviceRef: <+input>
+                serviceInputs: <+input>
+              environment:
+                environmentRef: <+input>
+                environmentInputs: <+input>
+                infrastructureDefinitions: <+input>
+        - stage:
+            identifier: dff
+            template:
+              templateInputs:
+                type: Deployment
+                spec:
+                  service:
+                    serviceRef: <+input>
+                    serviceInputs: <+input>
+                  environments:
+                    values: <+input>
+                variables:
+                  - name: end_point
+                    type: String
+                    default: got
+                    value: <+input>.default(got)
+                  - name: version
+                    type: String
+                    value: <+input>.default(1.0.0)
+                  - name: artifact_name
+                    type: String
+                    value: <+input>
+                  - name: is_tomcat_restart
+                    type: String
+                    value: <+input>.default(True).allowedValues(True,False)
+                  - name: target_artifact_dir
+                    type: String
+                    value: <+input>
+      properties:
+        ci:
+          codebase:
+            build: <+input>
+  projectIdentifier: CSETest1
+  orgIdentifier: AbhiOrg
