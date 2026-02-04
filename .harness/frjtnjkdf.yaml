@@ -1,0 +1,65 @@
+inputSet:
+  name: frjtnjkdf
+  identifier: frjtnjkdf
+  orgIdentifier: AbhiOrg
+  projectIdentifier: CSETest1
+  pipeline:
+    identifier: testpipel
+    template:
+      templateInputs:
+        stages:
+          - stage:
+              identifier: deploy
+              type: Deployment
+              spec:
+                service:
+                  serviceRef: K8new
+                environment:
+                  environmentRef: ECS_INFRA
+                  infrastructureDefinitions:
+                    - identifier: two
+          - stage:
+              identifier: k8s_apply
+              type: Deployment
+              spec:
+                service:
+                  serviceRef: K8new
+                environment:
+                  environmentRef: ECS_INFRA
+                  infrastructureDefinitions:
+                    - identifier: two
+          - stage:
+              identifier: dff
+              template:
+                templateInputs:
+                  type: Deployment
+                  spec:
+                    service:
+                      serviceRef: canarysrv
+                    environments:
+                      values:
+                        - environmentRef: ECS_INFRA
+                          deployToAll: false
+                          infrastructureDefinitions:
+                            - identifier: ssh
+                  variables:
+                    - name: end_point
+                      type: String
+                      default: got
+                      value: got
+                    - name: version
+                      type: String
+                      value: 1.0.0
+                    - name: artifact_name
+                      type: String
+                      value: dfsg
+                    - name: is_tomcat_restart
+                      type: String
+                      value: "True"
+                    - name: target_artifact_dir
+                      type: String
+                      value: srdfgfd
+        properties:
+          ci:
+            codebase:
+              build: <+input>
