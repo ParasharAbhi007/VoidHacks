@@ -34,5 +34,7 @@ spec:
         service_name: ${{ parameters.service_name }}
       apikey: ${{ parameters.token }}
 metadata:
+  annotations:
+    backstage.io/techdocs-ref: dir:.
   tags:
   - hello
